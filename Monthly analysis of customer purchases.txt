@@ -1,0 +1,127 @@
+
+CUSTOMER PURCHASE DETAILS TABLE CREATION
+
+            /*TABLE CREATION TO STORE THE CUSTOMER PURCHASE DETAILS*/
+
+CREATE TABLE CUSTOMER(
+    ID  NUMBER(5),
+    NAME VARCHAR2(10),
+    GENDER VARCHAR2(7),
+    ADDRESS VARCHAR2(15),
+    PITEM VARCHAR(10),
+    PRICE NUMBER(10),
+    DOP DATE);
+
+OUTPUT:
+TABLE CREATED
+
+---------------------------------------------------------------------------------------------
+
+CUSTOMER PURCHASE DETAILS TABLE STRUCTURE
+           
+               /* TO SEE THE STRUCTURE*/
+
+desc customer;
+
+ Name                                      Null?    Type
+ ----------------------------------------- -------- -----------------------------------------
+ ID                                                 NUMBER(5)
+ NAME                                               VARCHAR2(10)
+ GENDER                                             VARCHAR2(7)
+ ADDRESS                                            VARCHAR2(15)
+ PITEM                                              VARCHAR2(10)
+ PRICE                                              NUMBER(10)
+ DOP                                                DATE
+----------------------------------------------------------------------------------------------
+
+CUSTOMER PURCHASE DETAILS PROCEDURE CREATION
+
+       /*CREATING THE PROCEDURE TO INSERT THE CUSTOMER PURCHASE DETAILS*/ 
+
+CREATE OR REPLACE PROCEDURE CUSTOMER_INSERT(
+    pid   CUSTOMER.ID%TYPE,
+    pname CUSTOMER.NAME%TYPE,
+    pgender CUSTOMER.GENDER%TYPE,
+    paddress CUSTOMER.ADDRESS%TYPE,
+    ppitem   CUSTOMER.PITEM%TYPE,
+    pprice   CUSTOMER.PRICE%TYPE,
+    pdop     CUSTOMER.DOP%TYPE)
+    IS
+    BEGIN
+    INSERT INTO CUSTOMER(ID,NAME,GENDER,ADDRESS,PITEM,PRICE,DOP)
+   VALUES(pid,pname,pgender,paddress,ppitem,pprice,pdop);
+   COMMIT;
+   END;
+   /
+
+
+OUTPUT:
+PROCEDURE CREATED
+
+         /*FOR EXECUTING THE PROCEDURE*/
+
+EXEC CUSTOMER_INSERT(1,'hada','female','vijayawada',' HP laptop',75000,'02-oct-22');
+EXEC CUSTOMER_INSERT(2,'jay','male','Bhadrachalam','ASUS',90000,'15-nov-22');
+EXEC CUSTOMER_INSERT(3,'nandhu','female','nepal','iphone',115000,'20-nov-22');
+EXEC CUSTOMER_INSERT(4,'vamsi','male','bheemavaram','IOS Watch',85000,'28-nov-22');
+
+
+OUTPUT:
+PL/SQL procedure successfully completed.
+
+select *from customer;
+  
+output:
+  
+   ID        NAME          GENDER         ADDRESS         PITEM          PRICE           DOP
+--------------------------------------------------------------------------------------------------------------
+   1        hada          female       vijayawada      HP laptop        75000        02-oct-22
+   2        jay           male         Bhadrachalam    ASUS             90000        15-nov-22
+   3        nandhu        female        nepal          iphone           115000       20-nov-22
+   4        vamsi         male         bheemavaram     IOSWatch         85000        28-nov-22
+
+
+--------------------------------------------------------------------------------------------------------------
+
+
+/* SUM OF PRICE FOR A RANGE OF MONTH*/
+
+SET SERVEROUTPUT ON;
+SQL> DECLARE
+  2      v_price NUMBER(8);
+  3  BEGIN
+  4     SELECT sum(price) INTO v_price FROM customer
+  5     WHERE dop between '01-nov-22' and '30-nov-22';
+  6     DBMS_OUTPUT.PUT_LINE(v_price);
+  7  END;
+  8  /
+
+OUTPUT:
+290000
+
+PL/SQL procedure successfully completed.
+
+----------------------------------------------------------------------------------------------------
+FOR MONTHLY ANALYSIS
+
+ SET SERVEROUTPUT ON;
+SQL> DECLARE
+  2      v_price NUMBER(8);
+  3  BEGIN
+  4     SELECT sum(price) INTO v_price FROM customer
+  5     WHERE dop between '01-nov-22' and '30-nov-22';
+  6     DBMS_OUTPUT.PUT_LINE(v_price);
+  7     IF v_price>=500000 THEN                          /* TARGET IS 500000*/
+  8       DBMS_OUTPUT.PUT_LINE('the target is reach');
+  9     ELSE
+ 10       DBMS_OUTPUT.PUT_LINE('the target is not reach');
+ 11     END IF;
+ 12  END;
+ 13  /
+
+OUTPUT:
+
+290000
+the target is not reach
+
+PL/SQL procedure successfully completed.
