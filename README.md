@@ -1,1 +1,1 @@
-# my-project
+Monthly Analysis of customer purchases
